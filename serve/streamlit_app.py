@@ -6,7 +6,7 @@ from datetime import datetime, tzinfo, date
 import os
 
 # -- load config
-config = load_config(filepath = "../settings.yml")
+config = load_config(filepath = "./settings.yml")
 ROOT_DIR = config['dir']['root']
 FINAL_DIR = config['dir']['final_data']
 FILENAME = config['project']['analysis_file']
