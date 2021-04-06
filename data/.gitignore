@@ -1,3 +1,5 @@
-*
+0_external/
+0_raw/
+1_interim/
 !.gitignore
 !README.md
