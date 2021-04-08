@@ -66,7 +66,7 @@ def transform_plot_data(df, to_uppercase, top_n):
 @task
 def web_deployment(df_trend, df_top, project_name, top_n): 
 	figure = deploy.create_plot(df_trend, df_top)
-	# deploy.deploy_plot(figure, filename=project_name)
+	deploy.deploy_plot(figure, filename=project_name)
 
 
 

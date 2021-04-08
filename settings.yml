@@ -3,7 +3,7 @@ project:
   filename: 'sustainable_finance'
   analysis_file: 'esg_trends_analysis'
 dir:
-  root: './'
+  root: '../'
   pipeline: 'pipelines'
   raw_data: 'data/0_external'
   interim_data: 'data/1_interim'
@@ -27,7 +27,8 @@ query:
     "esg movies", 
     "esg mobility", 
     "esg nerdl", 
-    "gold"
+    "gold", 
+    "esg secure p8b"
     ]   
   uppercase: [
     "ESG", 
@@ -43,7 +44,8 @@ query:
     "ISS ", 
     "TCFD", 
     "HLEG", 
-    "EBA "
+    "EBA ", 
+    "TEG "
     ]
 
 
