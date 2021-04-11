@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from streamlit_utils.app_utilities import load_config, load_data
+from utils.app_utilities import load_config, load_data
 from datetime import datetime, tzinfo, date
 import os
 
@@ -17,9 +17,9 @@ df = load_data(filepath=CSV).query("ranking=='rising'")
 df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 
 # -- process data
-
+t_most_recent = df.t.max() 
 # most recent date
-date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0]
+date_most_recent = df.loc[df.t==t_most_recent].query_date.unique()[0]
 
 
 # -- SELECTIONS
@@ -45,10 +45,10 @@ st.write(f"""Last updated on __{date_most_recent}__.
 st.write("## Ranking",
 	df_selected_date.sort_values(by='rank_t').loc[:,['query', 'rank_t', 'rank_absolute_change']].head(10),
 	df_selected_date.sort_values(by='rank_t').loc[:,['query','rank_t']].reset_index(drop=True), 
-	"## Winners ", 
-	df_selected_date.loc[:,['query', 'rank_t', 'rank_t-1', 'rank_absolute_change']].sort_values(by='rank_absolute_change', ascending=False).iloc[:10].reset_index(drop=True), 
 	"## Loosers",
 	df_selected_date.loc[:,['query', 'rank_t', 'rank_t-1', 'rank_absolute_change']].sort_values(by='rank_absolute_change', ascending=True).iloc[:10].reset_index(drop=True), 
+	"## Winners ", 
+	df_selected_date.loc[:,['query', 'rank_t', 'rank_t-1', 'rank_absolute_change']].sort_values(by='rank_absolute_change', ascending=False).iloc[:10].reset_index(drop=True), 
 	"## Newly listed",
 	df_selected_date.loc[df.new_entry_t == 1, ['query', 'keyword','rank_t']]
 	)

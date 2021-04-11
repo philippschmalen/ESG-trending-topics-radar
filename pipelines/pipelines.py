@@ -66,7 +66,7 @@ def transform_plot_data(df, to_uppercase, top_n):
 @task
 def web_deployment(df_trend, df_top, project_name, top_n): 
 	figure = deploy.create_plot(df_trend, df_top)
-	deploy.deploy_plot(figure, filename=project_name)
+	# deploy.deploy_plot(figure, filename=project_name)
 
 
 
@@ -84,7 +84,7 @@ def main():
 		TO_UPPERCASE   = config['query']['uppercase']
 		GEO 		   = config['query']['geo']
 		TOP_N 	 	   = config['query']['top_n']
-		ROOT_DIR	   = config['dir']['root']
+		ROOT_DIR	   = '../'
 		RAW_DIR        = os.path.join(ROOT_DIR, config['dir']['raw_data'])
 		FINAL_DIR      = os.path.join(ROOT_DIR, config['dir']['final_data'])
 		FILENAME_RAW   = config['project']['filename']
