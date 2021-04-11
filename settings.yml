@@ -4,6 +4,7 @@ project:
   analysis_file: 'esg_trends_analysis'
 dir:
   root: './'
+  root_pipeline: '../'
   pipeline: 'pipelines'
   raw_data: 'data/0_external'
   interim_data: 'data/1_interim'

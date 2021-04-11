@@ -84,7 +84,7 @@ def main():
 		TO_UPPERCASE   = config['query']['uppercase']
 		GEO 		   = config['query']['geo']
 		TOP_N 	 	   = config['query']['top_n']
-		ROOT_DIR	   = '../'
+		ROOT_DIR	   = config['dir']['root_pipeline']
 		RAW_DIR        = os.path.join(ROOT_DIR, config['dir']['raw_data'])
 		FINAL_DIR      = os.path.join(ROOT_DIR, config['dir']['final_data'])
 		FILENAME_RAW   = config['project']['filename']
