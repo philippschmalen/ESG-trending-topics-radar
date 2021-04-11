@@ -16,13 +16,11 @@ CSV = os.path.join(ROOT_DIR, FINAL_DIR, FILENAME+'.csv')
 df = load_data(filepath=CSV).query("ranking=='rising'")
 df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 
-# -- process data
 
+# -- SELECTIONS
 # most recent date
 date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0]
 
-
-# -- SELECTIONS
 # date selection
 selected_date = st.sidebar.select_slider('Slide to select', 
 	value=date_most_recent,
