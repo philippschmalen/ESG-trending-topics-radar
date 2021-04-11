@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from utils.app_utilities import load_config, load_data
+from streamlit_utils.app_utilities import load_config, load_data
 from datetime import datetime, tzinfo, date
 import os
 
