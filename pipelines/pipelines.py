@@ -13,6 +13,18 @@ from analysis_dashboard import (extract as analysis_extract,
 								transform as analysis_transform)
 
 
+import logging
+logging.basicConfig(
+	level=logging.DEBUG,
+	format='{asctime} {levelname:<8} {message}',
+	style='{',
+	filename='log/esg_radar.log', 
+	filemode='w'
+)
+# for visualization with graphviz
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
+
+
 
 # ~-- SOURCE DATA: GOOGLE TRENDS 
 @task(max_retries=3, retry_delay=timedelta(seconds=40))
@@ -66,7 +78,7 @@ def transform_plot_data(df, to_uppercase, top_n):
 @task
 def web_deployment(df_trend, df_top, project_name, top_n): 
 	figure = deploy.create_plot(df_trend, df_top)
-	# deploy.deploy_plot(figure, filename=project_name)
+	deploy.deploy_plot(figure, filename=project_name)
 
 
 
@@ -141,6 +153,7 @@ def main():
 		top_n=TOP_N, 
 		project_name=PROJECT
 		)
+	flow.visualize()
 
 
 if __name__ == "__main__":
