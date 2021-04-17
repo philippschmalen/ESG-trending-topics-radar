@@ -49,11 +49,3 @@ query:
     "TEG "
     ]
 
-
-
-# [data-science-trends]
-# DATA_DIR = C:/Users\phili\Google Drive\Projekter\Google keywords\esg_trending_topics\data\0_external
-# FILE_NAME = data_science
-# KW_LIST = ["data science", "machine learning", "deep learning", "artificial intelligence", "ai"], 
-# GEO = global
-# TOP_N = 35

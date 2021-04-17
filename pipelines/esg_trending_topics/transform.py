@@ -82,8 +82,9 @@ def select_topn(df, top_n):
 def sanitize_labels(df, to_uppercase):
     """ Insert linebreaks and create headings """
     # make some labels uppercase
-    for s in to_uppercase:
-        df['query'] = df['query'].str.replace(s.lower(), s)
+    if to_uppercase:
+        for s in to_uppercase:
+            df['query'] = df['query'].str.replace(s.lower(), s)
     # create labels
     df['labels'] = df['query'].apply(lambda x: x.replace(' ', '<br>')) # linebreaks
     df['ranking_label'] = df.ranking.replace({'top': f'Evergreens - updated {df.date.to_list()[0]}',

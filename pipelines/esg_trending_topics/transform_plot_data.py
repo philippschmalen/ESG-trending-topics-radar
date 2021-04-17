@@ -1,7 +1,7 @@
 
 import pandas as pd
 
-def add_features(df, keep_n_largest=25):
+def add_features(df):
     """ Create normalized values for even display """
     
     assert df.columns.str.contains("query|value|keyword|ranking|timestamp|geo").all(), "Add features failed. \
