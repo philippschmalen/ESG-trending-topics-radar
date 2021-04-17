@@ -3,63 +3,70 @@
 __Goal__ 
 > Stay ahead of the curve in ESG and sustainable finance topics. Stay informed with a dashboard on what is trending on Google.
 
+__Deployed__ on Streamlit sharing: https://share.streamlit.io/philippschmalen/esg-trending-topics-radar
+
+![](docs/esg_radar1.png)
+
+__In production__ on [towardssustainablefinance.com](http://www.towardssustainablefinance.com/):  http://www.towardssustainablefinance.com/2021/03/19/trending-topics-in-sustainable-finance/
+
+![](docs/esg_radar2.png)
+
 ## Getting started
 
-Create the conda virtual environment with 
-
 ```bash
-conda env create -f environment.yml
+# create conda virtual environment
+conda env create -f serve/env.yml
+# activate environment
+conda activate esg_trend
 ```
 
+The `requirements.txt` is solely for deploying to Streamlit sharing. 
+
+### Other requirements
+
+You need a Chart Studio account set up with your credentials. [see here](https://plotly.com/python/getting-started-with-chart-studio/) for details. 
+
+### Streamlit app
+
+```bash
+# run streamlit app
+streamlit run streamlit_app.py
+```
+
+### Prefect pipeline for sourcing google trends
+
+Either run `./pipelines/pipelines.py` or __on Windows__ you can execute it via a batch file.
+
+Edit `./pipelines/run.bat` 
+
+```bash
+[...]
+# set path to your python executable
+set CONDAPATH=C:\Users\YOURUSERNAME\PATHTO\Miniconda3orAnaconda3
+# set name of conda environment
+set ENVNAME=esg_trend
+[...]
+```
+
+Then you can execute `./pipelines/run.bat` to run the prefect pipeline.
 
 ### Folder structure
 ```bash
+|   # project root where streamlit_app.py lives and requirements.txt
 ├───data
-│   ├───0_external # store google trends data
-│   ├───0_raw # source and immutable data
-│   ├───1_interim # temporarily created data, e.g. for preprocessing
-│   └───2_final # ready-to-use datasets
-├───docs
-│   ├───data_dictionaries
-│   └───references
-├───notebooks # exploration and code drafts
-├───output
-│   ├───features
-│   ├───models
-│   └───reports
-│       └───figures
-├───pipelines
-│   ├───esg_trending_topics
-│   └───tests
-│       └───fixtures
-└───serve
-    └───tests
-        └───fixtures
+│   ├───0_external # where Google Trends data lives
+│   ├───1_interim # any data that needs to be temporarily stored
+│   └───2_final # ready-made data for analysis
+|
+├───notebooks # jupyter notebooks for exploration only 
+├───pipelines # prefect pipelines to query API, build plots and prepare analysis
+|
+│   ├───analysis_dashboard # utilities for streamlit app
+│   ├───esg_trending_topics # utilities to source data from Google Trends
+│   └───log
+├───serve # anything serving-related, e.g. find env.yml for conda env 
+└───streamlit_utils # find utilities for streamlit_app.py
 ```
-
-## Project Roadmap
-
-1. Research: Where to get the data
-    1. Google trends API capabilities?
-    1. Google search API?
-    1. Google keywords API?
-    1. optional: Trending tweets
-    1. optional: News headlines
-1. Trial and error with notebooks
-    1. collect data
-    1. refactor to basic functions
-    1. Exploration: Does the data answer the question?
-1. Implement scripts
-    1. create functions
-    1. refactor
-    1. tests: hypothesis, mockup, pandas.testing
-    1. optional: prefect DAG
-1. Visuals
-    1. plotly
-    1. dash
-1. Documentation
-    1. readme
-    1. blog
 
 ## Prefect
 
