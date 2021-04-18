@@ -32,8 +32,9 @@ st.set_page_config(layout='wide')
 
 # -- load data
 df = load_data(filepath=CSV).query("ranking=='rising'")
-df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 df = df.sort_values(by='query_date')
+df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
+
 
 
 
@@ -76,7 +77,6 @@ f"""Selected: {selected_date}. Data last updated {date_most_recent}.
 ---
 """
 
-'', 
 
 st.plotly_chart(fig_treemap)
 
@@ -84,6 +84,7 @@ st.plotly_chart(fig_treemap)
 st.write(
 '## All data',
 df_show,
+
 "## Top-10 ranking",
 df_show.sort_values(by='Rank').loc[:,['Keyword', 'Rank', 'Change in ranking']].head(10),
 "## Winners - highest gain in rank", 
@@ -95,4 +96,5 @@ df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
 "## Newly listed",
 df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank']]
 )
+
 
