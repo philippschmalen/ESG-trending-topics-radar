@@ -11,7 +11,11 @@ __In production__ on [towardssustainablefinance.com](http://www.towardssustainab
 
 ![](docs/esg_radar2.png)
 
+--- 
+
 ## Getting started
+
+To run a local instance, follow the steps: 
 
 ```bash
 # create conda virtual environment
@@ -20,18 +24,37 @@ conda env create -f serve/env.yml
 conda activate esg_trend
 ```
 
-The `requirements.txt` is solely for deploying to Streamlit sharing. 
+The `requirements.txt` is solely for deploying to _Streamlit sharing_. Use `./serve/requirements.txt` if hosting on a Linux instance.
 
-### Other requirements
-
-You need a Chart Studio account set up with your credentials. [see here](https://plotly.com/python/getting-started-with-chart-studio/) for details. 
-
-### Streamlit app
+__Note:__ You need a Chart Studio account configured with your credentials. Refer to the official docs, for details: [see here](https://plotly.com/python/getting-started-with-chart-studio/).
 
 ```bash
+# to run the source-to-plot pipeline
+python /pipelines/pipelines.py
+
 # run streamlit app
 streamlit run streamlit_app.py
 ```
+
+### Hosting on a linux instance
+
+Assuming that you are at the project root directory `./`:
+
+```bash
+# install packages
+pip install -r serve/requirements.txt
+
+# configure chart-studio credentials
+python3
+>>> import chart_studio
+>>> chart_studio.tools.set_credentials_file(username='DemoAccount', api_key='lr1c37zw81')
+>>> exit()
+
+# run prefect pipeline with scheduler 
+python3 pipelines/pipelines.py &
+```
+
+---
 
 ### Prefect pipeline for sourcing google trends
 
