@@ -119,7 +119,7 @@ def main():
 		interval=timedelta(days=1),
 	)
 
-	with Flow("etl") as flow: # , schedule=schedule
+	with Flow("etl", schedule=schedule) as flow: # 
 
 		# ~-- parameter
 		raw_data_dir = Parameter(name="raw_data_dir")
