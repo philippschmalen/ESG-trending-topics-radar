@@ -1,5 +1,11 @@
+"""
+	Purpose of this script
+		* manage scripts to get google trends data
+		* and deploy treemap to chart-studio and
+		* towardssustainablefinance.com
+
+"""
 # general
-import configparser
 from datetime import timedelta, datetime
 import os
 import json
@@ -108,10 +114,10 @@ def main():
 	
 	# ~----------------- FLOW -----------------~
 	# ~-- daily schedule
-	# schedule = IntervalSchedule(
-	# 	start_date=datetime.utcnow() + timedelta(seconds=1),
-	# 	interval=timedelta(days=1),
-	# )
+	schedule = IntervalSchedule(
+		start_date=datetime.utcnow() + timedelta(seconds=1),
+		interval=timedelta(days=1),
+	)
 
 	with Flow("etl") as flow: # , schedule=schedule
 
@@ -153,7 +159,9 @@ def main():
 		top_n=TOP_N, 
 		project_name=PROJECT
 		)
-	flow.visualize()
+
+	# to visualize the flow 
+	# flow.visualize()
 
 
 if __name__ == "__main__":
