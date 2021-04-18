@@ -1,6 +1,8 @@
 """
-~-- TRANSFORM
-Create relevant statistics about Google trends data
+    TRANSFORM
+    Create relevant statistics about Google trends data
+    for streamlit_app.py
+
 """
 
 import pandas as pd
