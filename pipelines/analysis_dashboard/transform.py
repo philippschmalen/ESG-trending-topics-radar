@@ -45,7 +45,7 @@ def trends_statistics(df, rank_category='rising'):
     # keywords for each period  to compare sets
     queries_dict = df.groupby('t')['query'].apply(list).to_dict()
     # compare query responses sets across last two periods 
-    dropouts = list(set(queries_dict[t_max-1]).difference(set(queries_dict[t_max]))) 
+    dropouts = list(set(queries_dict[(t_max-1)]).difference(set(queries_dict[t_max]))) 
     df['dropout_t+1'] = ((df.t == t_max-1) & df['query'].isin(dropouts))*1
 
     ## fill missings
