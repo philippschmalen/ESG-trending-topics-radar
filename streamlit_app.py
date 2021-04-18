@@ -32,7 +32,7 @@ st.set_page_config(layout='wide')
 
 # -- load data
 df = load_data(filepath=CSV).query("ranking=='rising'")
-df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
+df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y').sort_values(by='query_date')
 '', 
 
 
