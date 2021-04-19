@@ -42,15 +42,32 @@ df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 # most recent 
 date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0]
 
-# date slider
+# select date with slider
 selected_date = st.sidebar.select_slider('Slide to select', 
 	value=date_most_recent,
-	options=df.query_date.unique().tolist(), )
-
-# subset data, sort by rank and reset index
+	options=df.query_date.unique().tolist())
 df_selected = df.loc[df.query_date==selected_date]
-df_plot = plot_data(df_selected, to_uppercase=TO_UPPERCASE, top_n=1000)[0]
-fig_treemap = create_plot_rising(df_plot).update_layout(height=500, width=1200)
+
+# select keyword 
+selected_keyword = st.sidebar.multiselect('Select keyword for analysis', 
+	default=df_selected.loc[df_selected.rank_t == 1,'query'].to_list()[0],
+	options=df_selected['query'].unique().tolist())
+
+# -- treemap data and figure
+df_treemap = plot_data(df_selected, to_uppercase=TO_UPPERCASE, top_n=1000)[0]
+fig_treemap = create_plot_rising(df_treemap).update_layout(height=500, width=1200)
+
+# -- timeline data and figure
+if selected_keyword:
+	df_timeline = df.loc[df['query'].isin(selected_keyword)]
+	df_timeline.query_date = pd.to_datetime(df_timeline.query_date, format='%d.%m.%Y')
+	df_timeline.sort_values(by=['query_date', 'query'], inplace=True)
+	df_timeline['query_date_end'] = df_timeline.query_date.shift()
+	# df_timeline['query_date_end'] = df_timeline.query_date + (df_timeline.query_date-df_timeline.query_date.shift())
+
+	fig_timeline = px.timeline(df_timeline, x_start="query_date", x_end="query_date_end", y="rank_t", color='query')
+	fig_timeline['layout']['yaxis']['autorange'] = "reversed"
+	# TODO: label axes
 
 
 
@@ -94,7 +111,10 @@ df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
 df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
 			.sort_values(by='Change in ranking', ascending=False).iloc[:10].reset_index(drop=True), 
 "## Newly listed",
-df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank']]
-)
+df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank']],
 
+
+)
+"## Keyword rank timeline"
+st.plotly_chart(fig_timeline)
 
