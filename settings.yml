@@ -48,4 +48,14 @@ query:
     "EBA ", 
     "TEG "
     ]
+app: 
+  rename: {'query': 'Keyword', 
+        "rank_t": "Rank",
+        'rank_t-1': "Previous rank", 
+        'keyword': 'Topic', 
+        'value': 'Raw Google Trends value', 
+        'query_date': 'Date', 
+        'rank_absolute_change': 'Change in ranking', 
+        'new_entry_t': 'New this period',
+        'dropout_t+1': 'Dropout next period'}
 

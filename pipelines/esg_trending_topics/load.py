@@ -1,8 +1,13 @@
 
 import pandas as pd
+import os
 
-# ~------------------ LOAD ------------------~
 def write_to_csv(df, filename):
-	print(f'\nExport data, dimension: {df.shape} to\t{filename}\n')
-	print(df.head(3).to_markdown())		
-	df.to_csv(f'{filename}', index=False) 
+	# if file does not exist write header 
+	if not os.path.isfile('filename.csv'):
+		df.to_csv(f'{filename}', index=False) 
+	else: # else it exists so append without writing the header
+		df.to_csv(f'{filename}', index=False, mode='a') 
+
+
+	

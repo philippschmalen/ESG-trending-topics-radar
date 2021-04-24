@@ -7,27 +7,15 @@ from pipelines.esg_trending_topics.deploy import create_plot_rising
 from datetime import datetime, tzinfo, date
 import os
 
-# ~------------- SETTINGS -------------~
-config    = load_config(filepath = "./settings.yml")
-ROOT_DIR  = config['dir']['root']
-FINAL_DIR = config['dir']['final_data']
-FILENAME  = config['project']['analysis_file']
-CSV       = os.path.join(ROOT_DIR, FINAL_DIR, FILENAME+'.csv') 
-TO_UPPERCASE = config['query']['uppercase']
-
-# intuitive column names
-rename_dict = {'query': 'Keyword', 
-				"rank_t": "Rank",
-				'rank_t-1': "Previous rank", 
-				'keyword': 'Topic', 
-				'value': 'Raw Google Trends value', 
-				'query_date': 'Date', 
-				'rank_absolute_change': 'Change in ranking', 
-				'new_entry_t': 'New this period',
-				'dropout_t+1': 'Dropout next period'}
-
 # Use the full page instead of a narrow central column
 st.set_page_config(layout='wide')
+
+
+
+# ~------------- SETTINGS -------------~
+config, CSV = load_config(filepath = "./settings.yml")
+TO_UPPERCASE = config['query']['uppercase']
+rename_dict = config['app']['rename'] # intuitive column names
 # ~-----------------------------------~
 
 # -- load data
@@ -36,11 +24,8 @@ df = df.sort_values(by='query_date')
 df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 
 
-
-
 # -- select date to inspect data 
-# most recent 
-date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0]
+date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0] # most recent 
 
 # select date with slider
 selected_date = st.sidebar.select_slider('Slide to select', 
