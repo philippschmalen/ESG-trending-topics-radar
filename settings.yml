@@ -46,7 +46,8 @@ query:
     "TCFD", 
     "HLEG", 
     "EBA ", 
-    "TEG "
+    "TEG ", 
+    "IPSF"
     ]
 app: 
   rename: {'query': 'Keyword', 
