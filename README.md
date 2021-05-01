@@ -69,8 +69,7 @@ pwdx [PID]
 kill -9 [PID]
 
 # start again
-nohup python3 pipelines.py &
-
+nohup python3 prod/esg_trending_topics/pipelines/pipelines.py &
 ```
 
 
