@@ -1,6 +1,7 @@
 import yaml
 import os
 import pandas as pd
+import logging
 
 def load_config(filepath):
 	"""Return dictionary with settings and final CSV path"""
@@ -17,5 +18,23 @@ def load_config(filepath):
 
 def load_data(filepath):
 	"""Read csv-only file from data_dir/filename"""
+    logging.info(
+    f"Load data from raw data dir: {raw_data_dir}, Filename: {filename}")
 	df = pd.read_csv(filepath)
+	df = set_dtypes(df)
+
 	return df
+
+
+def set_dtypes(df):
+    """ Set dtypes for columns """
+    # drop rows where a column names appear (happened while appending to csv)
+    df = df.loc[df[df.columns[0]] != df.columns[0]]
+    # convert numerics
+    df = df.apply(pd.to_numeric, errors='ignore')
+    # parse query_timestamp
+    df.query_timestamp = df.query_timestamp.apply(pd.to_datetime)
+
+    df.reset_index(inplace=True, drop=True)
+
+    return df

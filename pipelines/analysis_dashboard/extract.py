@@ -30,6 +30,7 @@ def set_dtypes(df):
     df = df.apply(pd.to_numeric, errors='ignore')
     # parse timestamps
     df.query_timestamp = df.query_timestamp.apply(pd.to_datetime)
+    df.reset_index(inplace=True, drop=True)
 
     return df
 
