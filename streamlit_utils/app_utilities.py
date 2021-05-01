@@ -18,8 +18,7 @@ def load_config(filepath):
 
 def load_data(filepath):
 	"""Read csv-only file from data_dir/filename"""
-    logging.info(
-    f"Load data from raw data dir: {raw_data_dir}, Filename: {filename}")
+	logging.info(f"Load data from raw data dir: {filepath}")
 	df = pd.read_csv(filepath)
 	df = set_dtypes(df)
 

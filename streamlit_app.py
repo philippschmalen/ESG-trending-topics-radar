@@ -44,12 +44,15 @@ fig_treemap = create_plot_rising(df_treemap).update_layout(height=500, width=120
 
 # -- timeline data and figure
 if selected_keyword:
+	# subset data
 	df_timeline = df.loc[df['query'].isin(selected_keyword)]
+	# change date format
 	df_timeline.query_date = pd.to_datetime(df_timeline.query_date, format='%d.%m.%Y')
+	# sort by date
 	df_timeline.sort_values(by=['query_date', 'query'], inplace=True)
 	df_timeline['query_date_end'] = df_timeline.query_date.shift()
-	# df_timeline['query_date_end'] = df_timeline.query_date + (df_timeline.query_date-df_timeline.query_date.shift())
 
+	# plot
 	fig_timeline = px.timeline(df_timeline, x_start="query_date", x_end="query_date_end", y="rank_t", color='query')
 	fig_timeline['layout']['yaxis']['autorange'] = "reversed"
 	# TODO: label axes
@@ -61,6 +64,16 @@ df_show = df_selected.loc[:,list(rename_dict.keys())]\
 			.rename(mapper=rename_dict, axis=1)\
 			.sort_values(by='Rank')\
 			.reset_index(drop=True)
+# make change in ranking intuitivef
+df_show['Change in ranking'] = df_show['Change in ranking'].apply(lambda x: x*(-1))
+
+df_win = df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
+			.sort_values(by='Change in ranking', ascending=False).iloc[:10]\
+			.reset_index(drop=True)
+df_loose = df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
+			.sort_values(by='Change in ranking', ascending=True).iloc[:10]\
+			.reset_index(drop=True)
+df_new = df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank']]
 
 
 st.title("ESG trending topics")
@@ -71,10 +84,11 @@ f"""Selected: {selected_date}. Data last updated {date_most_recent}.
 
 * Rank: Rank measured by search volume (here: Raw Google Trends value)
 * Previous rank: ranking at previous period
-* Change in ranking: Rank change from previous to currently selected period. __Note:__ negative values indicate higher ranking
+* Change in ranking: Rank change from previous to currently selected period. 
+__Note:__ Positive values indicate higher ranking in the previous period
 
-* Winners: Those with the highest rank change from previous to current period
-* Loosers: Those with the highest negative rank change from previous to current period
+* Winners: Those who gained the most from previous to current period
+* Loosers: Those who lost the most rankings from previous to current period
 
 ---
 """
@@ -82,24 +96,12 @@ f"""Selected: {selected_date}. Data last updated {date_most_recent}.
 
 st.plotly_chart(fig_treemap)
 
-# display ranking for selected date
-st.write(
-'## All data',
-df_show,
+'## Raw data'
+with st.beta_expander("Raw data"): '', df_show
+with st.beta_expander("Winners - Highest rank gains "): '', df_win
+with st.beta_expander("Loosers - Highest rank losses "): '', df_loose
+with st.beta_expander("Newly listed"): '', df_new
 
-"## Top-10 ranking",
-df_show.sort_values(by='Rank').loc[:,['Keyword', 'Rank', 'Change in ranking']].head(10),
-"## Winners - highest gain in rank", 
-df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
-			.sort_values(by='Change in ranking', ascending=True).iloc[:10].reset_index(drop=True), 
-"## Loosers - highest loss in rank",
-df_show.loc[:,['Keyword', 'Rank', 'Previous rank', 'Change in ranking']]\
-			.sort_values(by='Change in ranking', ascending=False).iloc[:10].reset_index(drop=True), 
-"## Newly listed",
-df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank']],
-
-
-)
-"## Keyword rank timeline"
+"## Ranking timeline"
 st.plotly_chart(fig_timeline)
 

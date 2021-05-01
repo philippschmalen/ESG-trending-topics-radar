@@ -55,7 +55,7 @@ nohup python3 pipelines/pipelines.py &
 # used no hangup to continue after closing putty
 ```
 
-When changes were pushed to prod, use the following commands to trigger the pipeline:
+When changes were pushed to *prod*, use the following commands to trigger the pipeline:
 
 ```bash
 # list current python processes 
