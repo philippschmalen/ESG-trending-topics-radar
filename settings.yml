@@ -47,7 +47,8 @@ query:
     "HLEG", 
     "EBA ", 
     "TEG ", 
-    "IPSF"
+    "IPSF", 
+    "GPIF"
     ]
 app: 
   rename: {'query': 'Keyword', 
