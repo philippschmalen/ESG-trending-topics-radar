@@ -12,26 +12,26 @@ st.set_page_config(layout='wide')
 
 
 
-# ~------------- SETTINGS -------------~
-config, CSV = load_config(filepath = "./settings.yml")
-TO_UPPERCASE = config['query']['uppercase']
-rename_dict = config['app']['rename'] # intuitive column names
+# ~------------- CONFIG -------------~
+config, analysis_csv = load_config(filepath = "./settings.yml")
+to_uppercase = config['query']['uppercase']
+intuitive_colnames = config['app']['rename']
 # ~-----------------------------------~
 
 # -- load data
-df = load_data(filepath=CSV).query("ranking=='rising'")
+df = load_data(filepath=analysis_csv).query("ranking=='rising'")
 df = df.sort_values(by='query_date')
 df.query_date = pd.to_datetime(df.query_date).dt.strftime('%d.%m.%Y')
 
 
 # -- select date to inspect data 
-date_most_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0] # most recent 
+date_select_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0] # most recent 
 
 # select date with slider
 selected_date = st.sidebar.select_slider('Slide to select', 
-	value=date_most_recent,
+	value=date_select_recent,
 	options=df.query_date.unique().tolist())
-df_selected = df.loc[df.query_date==selected_date]
+df_selected = df.loc[df.query_date==selected_date].drop_duplicates()
 
 # select keyword 
 selected_keyword = st.sidebar.multiselect('Select keyword for analysis', 
@@ -39,7 +39,7 @@ selected_keyword = st.sidebar.multiselect('Select keyword for analysis',
 	options=df_selected['query'].unique().tolist())
 
 # -- treemap data and figure
-df_treemap = plot_data(df_selected, to_uppercase=TO_UPPERCASE, top_n=1000)[0]
+df_treemap = plot_data(df_selected, to_uppercase=to_uppercase, top_n=1000)[0]
 fig_treemap = create_plot_rising(df_treemap).update_layout(height=500, width=1200)
 
 # -- timeline data and figure
@@ -60,8 +60,8 @@ if selected_keyword:
 
 
 # select simple columns, rename, sort by Rank and reset index
-df_show = df_selected.loc[:,list(rename_dict.keys())]\
-			.rename(mapper=rename_dict, axis=1)\
+df_show = df_selected.loc[:,list(intuitive_colnames.keys())]\
+			.rename(mapper=intuitive_colnames, axis=1)\
 			.sort_values(by='Rank')\
 			.reset_index(drop=True)
 # make change in ranking intuitivef
@@ -78,7 +78,7 @@ df_new = df_show.loc[df_show['New this period'] == 1, ['Keyword', 'Topic','Rank'
 
 st.title("ESG trending topics")
 
-f"""Selected: {selected_date}. Data last updated {date_most_recent}. 
+f"""Selected: {selected_date}. Data last updated {date_select_recent}. 
 
 ### Data docs
 

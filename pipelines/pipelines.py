@@ -84,9 +84,9 @@ def transform_plot_data(df, to_uppercase, top_n):
 @task
 def web_deployment(df_trend, df_top, project_name, top_n):
     figure = deploy.create_plot(df_trend, df_top)
-    deploy.deploy_plot(figure, filename=project_name + '_all')
+    # deploy.deploy_plot(figure, filename=project_name + '_all')
     figure = deploy.create_plot_rising(df_trend)
-    deploy.deploy_plot(figure, filename=project_name)
+    # deploy.deploy_plot(figure, filename=project_name)
 
 
 def main():
@@ -113,13 +113,13 @@ def main():
 
     # ~----------------- FLOW -----------------~
     # ~-- daily schedule
-    schedule = IntervalSchedule(
-        start_date=datetime.strptime("20210424-040000UTC", "%Y%m%d-%H%M%S%Z"),
-        # start_date=datetime.utcnow() + timedelta(seconds=1),
-        interval=timedelta(days=1),
-    )
+    # schedule = IntervalSchedule(
+    #     start_date=datetime.strptime("20210424-040000UTC", "%Y%m%d-%H%M%S%Z"),
+    #     # start_date=datetime.utcnow() + timedelta(seconds=1),
+    #     interval=timedelta(days=1),
+    # )
 
-    with Flow("etl", schedule=schedule) as flow:
+    with Flow("etl") as flow: #, schedule=schedule
 
         # ~-- parameter
         raw_data_dir = Parameter(name="raw_data_dir")

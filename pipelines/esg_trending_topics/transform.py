@@ -55,7 +55,6 @@ def clean_data(df, blacklist):
     # remove blacklisted words
     df_clean = df_en.loc[~df_en['query'].str.contains('|'.join(blacklist)), :]
 
-    # reset index
     df = df_clean.reset_index(drop=True)
 
     return df

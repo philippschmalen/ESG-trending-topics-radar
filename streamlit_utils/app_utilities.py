@@ -12,13 +12,13 @@ def load_config(filepath):
 		final_dir = config['dir']['final_data'] # final data dir from root
 		filename = config['project']['analysis_file'] # filename to store
 
-		csv = os.path.join(root_dir, final_dir, filename+'.csv') 
+		path_analysis_file = os.path.join(root_dir, final_dir, filename+'.csv') 
 
-		return config, csv
+		return config, path_analysis_file
 
 def load_data(filepath):
 	"""Read csv-only file from data_dir/filename"""
-	logging.info(f"Load data from raw data dir: {filepath}")
+	logging.info(f"Load data from {filepath}")
 	df = pd.read_csv(filepath)
 	df = set_dtypes(df)
 

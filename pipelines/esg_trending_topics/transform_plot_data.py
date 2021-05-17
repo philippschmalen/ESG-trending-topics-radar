@@ -12,7 +12,7 @@ def add_features(df):
     df['value_total'] = grouped.transform('sum') # total sum 
     df['value_normalized'] = (df.value-grouped.transform('min'))/(grouped.transform('max')-grouped.transform('min')) # normalize 
     df['value_normalized_total'] = df.groupby(['ranking']).value_normalized.transform('sum') # total sum of normalized values 
-    df['date'] = pd.to_datetime(df.query_timestamp).dt.strftime("%d. %B %Y")
+    df['date'] = pd.to_datetime(df.query_timestamp).dtd
     
     return df
 

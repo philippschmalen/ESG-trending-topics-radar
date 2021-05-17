@@ -14,9 +14,8 @@ def load_data(raw_data_dir, filename):
     data_files = glob(f'{os.path.join(raw_data_dir, filename)}*')
     logging.info(
         f"Load data from raw data dir: {raw_data_dir}, Filename: {filename}")
+    df = pd.concat([pd.read_csv(file) for file in data_files]).reset_index(drop=True)
     # specify column dtypes
-    df_list = [pd.read_csv(file) for file in data_files]
-    df = pd.concat(df_list).reset_index(drop=True)
     df = set_dtypes(df)
 
     return df

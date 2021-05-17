@@ -9,22 +9,13 @@ import pandas as pd
 import logging
 
 
-def trends_statistics(df, rank_category='rising'):
+def trends_statistics(df):
     """Generate relevant statistics for a ranking category of Google trends (rising or top)"""
 
-    # subset by Google Trends category: rising or top
-    # select only ranking as specified
-    df = df.loc[df.ranking == rank_category].reset_index(drop=True)
-
-    # datetime
-    # timestamp to date
-    df['query_date'] = pd.to_datetime(df.query_timestamp).dt.date
     # time series indicator: t
     df['t'] = df.groupby('query_date').ngroup()
     # most recent period
     t_max = df.t.max()
-    # drop duplicates
-    df = df.drop_duplicates(subset=['ranking', 'query', 'query_date'])
 
     logging.debug(f"df dtypes after adding time series: {df.dtypes}")
 
@@ -62,10 +53,32 @@ def trends_statistics(df, rank_category='rising'):
     return df
 
 
-def dashboard_data(df):
+def dashboard_data(df, rank_category='rising'):
     """Create statistics for each category and concatenate dataframes """
-    ranking_categories = df.ranking.unique().tolist()
-    df = pd.concat([trends_statistics(df, rank_category=r)
-                    for r in ranking_categories])
+    # select only ranking as specified
+    df = df.loc[df.ranking == rank_category].reset_index(drop=True)
+    df['query_date'] = pd.to_datetime(df.query_timestamp).dt.date
+    df = df.drop_duplicates(subset=['keyword', 'query_date'])
 
-    return df
+    df_trends = trends_statistics(df)
+
+    return df_trends
+
+
+# TESTING ------------------------
+import streamlit as st
+import logging
+import sys
+sys.path.append('../')
+
+from esg_trending_topics.transform import clean_data
+from extract import load_data
+
+# next: 
+
+df_raw = load_data('../../data/2_final', filename='esg_trends_analysis')
+'', df_raw.dtypes
+
+st.stop()
+
+# # -------------------------------
