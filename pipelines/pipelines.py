@@ -63,13 +63,8 @@ def load_all_query_data(raw_data_dir, filename, blacklist):
 @task
 def transform_analysis_data(df):
     """Generate statistics for analysis in Streamlit dashboard """
-    df = analysis_transform.dashboard_data(df=df)
-    return df
-
-
-@task
-def export(df, path):
-    load.write_to_csv(df=df, filename=path)
+    df_analysis = analysis_transform.dashboard_data(df=df)
+    return df_analysis
 
 
 # ~-- TREEMAP PLOT

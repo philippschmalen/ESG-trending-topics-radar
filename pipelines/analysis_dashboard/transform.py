@@ -7,7 +7,18 @@
 
 import pandas as pd
 import logging
+import streamlit as st
 
+def create_query_date(df):
+    """ Day format of query_timestamp """
+    df['query_date'] = pd.to_datetime(df.query_timestamp).dt.date
+    return df
+
+def drop_duplicates(df):
+    """ Remove duplicates for anlaysis  """
+    df_nodup = df.drop_duplicates(subset=['query', 'value', 'query_date', 'ranking'])
+    logging.info(f"Drop {len(df)-len(df_nodup)} duplicates")
+    return df_nodup
 
 def trends_statistics(df):
     """Generate relevant statistics for a ranking category of Google trends (rising or top)"""
@@ -53,32 +64,38 @@ def trends_statistics(df):
     return df
 
 
-def dashboard_data(df, rank_category='rising'):
-    """Create statistics for each category and concatenate dataframes """
-    # select only ranking as specified
-    df = df.loc[df.ranking == rank_category].reset_index(drop=True)
-    df['query_date'] = pd.to_datetime(df.query_timestamp).dt.date
-    df = df.drop_duplicates(subset=['keyword', 'query_date'])
+def dashboard_data(df):
+    """Create statistics for a rank category (rising as default) """   
+    df_list = []
+    for rank_category in df.ranking.unique().tolist():
+        logging.info(f"dashboard_data(): rank category: {rank_category}")
+        df = df.loc[df.ranking == rank_category].reset_index(drop=True)
+        df_trends = (df.pipe(create_query_date)
+                        .pipe(drop_duplicates)
+                        .pipe(trends_statistics))
+        df_list.append(df_trends)
 
-    df_trends = trends_statistics(df)
-
-    return df_trends
+    return pd.concat(df_list)
 
 
 # TESTING ------------------------
-import streamlit as st
-import logging
-import sys
-sys.path.append('../')
+# import streamlit as st
+# import logging
+# import sys
+# sys.path.append('../')
 
-from esg_trending_topics.transform import clean_data
-from extract import load_data
+# from esg_trending_topics.transform import clean_data
+# from extract import load_data
 
-# next: 
+# # df_raw = load_data('../../data/2_final', filename='esg_trends_analysis')
+# # rising_kw = df_raw.loc[df_raw.ranking == 'rising'].drop_duplicates(subset=['query_date', 'keyword', 'ranking'])
+# # '', df_raw.shape
+# # '', rising_kw.shape
 
-df_raw = load_data('../../data/2_final', filename='esg_trends_analysis')
-'', df_raw.dtypes
+# kw_raw = load_data(raw_data_dir='../../data/2_final', filename='esg_trends_analysis')
+# '', kw_raw
+# '', dashboard_data(kw_raw)
 
-st.stop()
+# st.stop()
 
 # # -------------------------------

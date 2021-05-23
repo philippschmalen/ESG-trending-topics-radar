@@ -7,8 +7,9 @@ from glob import glob
 import os
 import pandas as pd
 import logging
+import streamlit as st 
 
-
+@st.cache
 def load_data(raw_data_dir, filename):
     # merge all data from directory
     data_files = glob(f'{os.path.join(raw_data_dir, filename)}*')

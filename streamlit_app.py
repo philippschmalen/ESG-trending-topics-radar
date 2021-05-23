@@ -31,7 +31,7 @@ date_select_recent = df.loc[df.t == df.t.max(),'query_date'].unique()[0] # most 
 selected_date = st.sidebar.select_slider('Slide to select', 
 	value=date_select_recent,
 	options=df.query_date.unique().tolist())
-df_selected = df.loc[df.query_date==selected_date].drop_duplicates()
+df_selected = df.loc[df.query_date==selected_date]
 
 # select keyword 
 selected_keyword = st.sidebar.multiselect('Select keyword for analysis', 
@@ -40,6 +40,8 @@ selected_keyword = st.sidebar.multiselect('Select keyword for analysis',
 
 # -- treemap data and figure
 df_treemap = plot_data(df_selected, to_uppercase=to_uppercase, top_n=1000)[0]
+'', df_selected
+'', plot_data
 fig_treemap = create_plot_rising(df_treemap).update_layout(height=500, width=1200)
 
 # -- timeline data and figure

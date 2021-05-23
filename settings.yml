@@ -16,7 +16,8 @@ query:
     "sustainable investment", 
     "ESG", 
     "sustainable finance", 
-    "responsible investment"
+    "responsible investment", 
+    "impact investing"
   ]
   blacklist: [
     "esg gold", 

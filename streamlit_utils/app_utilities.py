@@ -2,7 +2,9 @@ import yaml
 import os
 import pandas as pd
 import logging
+import streamlit as st
 
+@st.cache
 def load_config(filepath):
 	"""Return dictionary with settings and final CSV path"""
 	with open(filepath) as file:
@@ -16,11 +18,13 @@ def load_config(filepath):
 
 		return config, path_analysis_file
 
+@st.cache
 def load_data(filepath):
 	"""Read csv-only file from data_dir/filename"""
 	logging.info(f"Load data from {filepath}")
 	df = pd.read_csv(filepath)
 	df = set_dtypes(df)
+	df = df.sort_values(by='query_date')
 
 	return df
 
